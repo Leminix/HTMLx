@@ -13,6 +13,8 @@ const fs = require('node:fs')
 ///////////////////////////////
 const readline = require('node:readline')
 
+const decisions = require('./components/decisions')
+
 ///////////////////////////////////////////////
 //// create object for user console input ////
 /////////////////////////////////////////////
@@ -43,9 +45,10 @@ rl.question('Enter file name> ', (file) => {
                 /////////////////////////////
 
                 throw new Error(err)
+                return
             }else{
-                console.log(data)
-                
+                decisions(file)
+
             }
         })
         rl.close()
