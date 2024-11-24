@@ -62,14 +62,8 @@ module.exports = function decisions(file){
     /////////////////////////////
 
     obj.on('line', (line) => {
-       // console.log(line)
 
-        if(line.includes('<') && line.includes('>') && !(line.includes('_'))){
-            //content = `${content} ${line}`
-            //content = content.concat(' ', line)
-            content += line
-        }
-        else if(line.includes('$') && line.includes('=')){
+        if(line.includes('=') && (line.includes('<') || line.includes('>'))){
             helparray = line.split('=')
 
             //////////////////////////////////////////////////////////////
@@ -81,25 +75,58 @@ module.exports = function decisions(file){
                 value: helparray[1].trim()
             })
         }
-        else if(line.includes('<') && line.includes('_')){
+        else if(line.includes('<') && line.includes('>') && !(line.includes('_$'))){
+            content += line + '\n'
+        }
+        else if((line.includes('$') && line.includes('='))){
+            helparray = line.split('=')
+
+            //////////////////////////////////////////////////////////////
+            //// into array push object which has var name and value //// 
+            ////////////////////////////////////////////////////////////
+
+            vars.push({
+                name: helparray[0],
+                value: helparray[1].trim()
+            })
+        }
+        else if(line.includes('_$') || (line.includes('<') && line.includes('_$'))){
             let varname = line.split('_')
-            content += line
+            content += line + '\n'
             
             /////////////////////////////////////////////////
             //// find a varible in array and save value ////
             ///////////////////////////////////////////////
-           
+           let find = false
+
             vars.forEach(varObj => {
+                findvarname = varObj.name
                 if (varObj.name === varname[1]) {
                     content = content.replace(`_${varObj.name}_`, varObj.value)
+                    find = true
                 }
             })
+
+
+            /////////////////////////////////////////////////
+            //// check if every variables were declared ////
+            ///////////////////////////////////////////////
+
+            if(find === false){
+                throw new Error(`variable ${varname[1]} is undefined`)
+            }
+
         }
         else{
-            content = 'none'
+            content = '<h1>Something went wrong!</h1>'
         }
 
     })
+
+    /////////////////////////////////////////////////////////////
+    //// call create method which will create new html file ////
+    ///////////////////////////////////////////////////////////
+
     obj.on('close', () => {
         create(file, content)
     })
