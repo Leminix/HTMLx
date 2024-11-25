@@ -30,6 +30,12 @@ const create = require('./create')
 
     let helparray
 
+    ////////////////////////////////////////////////
+    //// if this variable is true compile code ////
+    //////////////////////////////////////////////
+
+    let keepreading = true
+
 
 
 ///////////////////////////////////
@@ -63,7 +69,22 @@ module.exports = function decisions(file){
 
     obj.on('line', (line) => {
 
-        if(line.includes('=') && (line.includes('<') || line.includes('>'))){
+
+
+
+
+
+
+
+
+
+
+
+/////////////////////////////////////////////////////////////////////////////////////
+///////////////////////////////////// variables ////////////////////////////////////
+///////////////////////////////////////////////////////////////////////////////////
+
+        if((line.includes('=') && (line.includes('<') || line.includes('>'))) && keepreading){
             helparray = line.split('=')
 
             //////////////////////////////////////////////////////////////
@@ -75,10 +96,10 @@ module.exports = function decisions(file){
                 value: helparray[1].trim()
             })
         }
-        else if(line.includes('<') && line.includes('>') && !(line.includes('_$'))){
+        else if((line.includes('<') && line.includes('>') && !(line.includes('_$'))) && keepreading === true){
             content += line + '\n'
         }
-        else if((line.includes('$') && line.includes('='))){
+        else if(line.includes('$') && line.includes('=')){
             helparray = line.split('=')
 
             //////////////////////////////////////////////////////////////
@@ -90,7 +111,7 @@ module.exports = function decisions(file){
                 value: helparray[1].trim()
             })
         }
-        else if(line.includes('_$') || (line.includes('<') && line.includes('_$'))){
+        else if((line.includes('_$') || (line.includes('<') && line.includes('_$'))) && keepreading){
             let varname = line.split('_')
             content += line + '\n'
             
@@ -117,9 +138,39 @@ module.exports = function decisions(file){
             }
 
         }
-        else{
-            content = '<h1>Something went wrong!</h1>'
+        //else if(line.includes('')){
+          //  content += ''
+        //}
+
+
+
+
+
+
+
+
+
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////
+/////////////////////////////////////////// conditionals //////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////////////////////////////////
+
+
+        else if(line.includes('if_start:') && keepreading){
+            let con = line.split(':')
+            let res = eval(con[1])
+
+            if(res === true){
+                keepreading = true
+            }else{
+                keepreading = false
+            }
+
         }
+        else if(line.includes('if_end') && !(keepreading)){
+            keepreading = true
+        }
+        
 
     })
 

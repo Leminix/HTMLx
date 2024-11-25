@@ -31,6 +31,22 @@ const rl = readline.createInterface({
 
 rl.question('Enter file name> ', (file) => {
 
+
+    /////////////////////////////////////////////////////////////////////
+    //// check if file html already exist and erace content os file ////
+    ///////////////////////////////////////////////////////////////////
+
+    let check = file.split('.')
+    if(check[0].html){
+        fs.writeFile(`${check[0]}.html`, '', (err) => {
+            if(err){
+                throw new Error(`${err}. file ${file} cannot be emptied`)
+            }
+        })
+    }
+
+
+
     if(file.includes('.htmlx')){
 
         /////////////////////////////////
