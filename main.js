@@ -1,23 +1,33 @@
 /* 
 This code is unlicensed, and was writen by only one programmer. The program was made as a hobby and is
 intended for own needs.
+
+declar and define a varoble: $<name>=<value>
+call a varible: _$<name>_
 */
 
-///////////////////////////
-//// import module fs ////
-/////////////////////////
-const fs = require('node:fs')
 
-/////////////////////////////////
-//// import module readline ////
-///////////////////////////////
+
+
+
+
+
+
+/*===================
+    main code
+====================*/
+const fs = require('node:fs')
 const readline = require('node:readline')
 
+
+/*=========================================
+    import module which compale your code 
+===========================================*/
 const decisions = require('./components/decisions')
 
-///////////////////////////////////////////////
-//// create object for user console input ////
-/////////////////////////////////////////////
+/*============================================
+     create object for user console input
+==============================================*/
 
 const rl = readline.createInterface({
   input: process.stdin,
@@ -25,57 +35,38 @@ const rl = readline.createInterface({
 })
 
 
-//////////////////////////////
-//// wait for user input ////
-////////////////////////////
+/*===========================
+    wait for user input 
+    =========================*/
 
 rl.question('Enter file name> ', (file) => {
 
 
-    /////////////////////////////////////////////////////////////////////
-    //// check if file html already exist and erace content os file ////
-    ///////////////////////////////////////////////////////////////////
+    /*=================================================================
+        check if file html already exist and erace content of file 
+    ===================================================================*/
 
     let check = file.split('.')
-    if(check[0].html){
-        fs.writeFile(`${check[0]}.html`, '', (err) => {
-            if(err){
-                throw new Error(`${err}. file ${file} cannot be emptied`)
-            }
-        })
-    }
+    fs.writeFile(`${check[0]}.html`, '', (err) => {
+        if(err){
+            throw new Error(`${err}. file ${file} cannot be emptied`)
+        }
+    })
 
-
+    /*===============================
+        check file format and
+        if format correct
+        call method for compile code
+    =================================*/
 
     if(file.includes('.htmlx')){
-
-        /////////////////////////////////
-        //// read content from file ////
-        ///////////////////////////////
-
-        fs.readFile(file,'utf8', (err, data) => {
-            if(err){
-                
-                ///////////////////////////////
-                //// print custome error ////
-                /////////////////////////////
-
-                throw new Error(err)
-                return
-            }else{
-                decisions(file)
-
-            }
-        })
+        decisions(file)
         rl.close()
-
     }else{
-        //////////////////////////////////////////////////////
-        //// print error massage about wrong file format ////
-        ////////////////////////////////////////////////////
+        /*==================================================
+            print error massage about wrong file format
+        ====================================================*/
 
         throw new Error('wrong file format use [FILE].htmlx')
     }
-
-
 })
