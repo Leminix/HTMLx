@@ -1,4 +1,3 @@
-
 let splitLine = []
 let variablesContent = ''
 let variablesStatus = []

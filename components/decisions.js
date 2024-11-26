@@ -10,6 +10,8 @@ const oneline = require('readline')
 
 const create = require('./create')
 const varHandling = require('./variables')
+const others = require('./others')
+const conditionas = require('./conditionals')
 
 
 let keepreading = true
@@ -45,6 +47,27 @@ module.exports = function decisions(file){
 
         else if(line.includes('_$') && keepreading){
             content += varObj.replacevar(line) + "\n"
+        }
+
+        /*=======================================
+                    conditionas
+        =========================================*/
+
+        else if(line.includes('if-start:') && keepreading){
+            keepreading = conditionas(line)
+        }
+
+        else if(line.includes('if-end')){
+            keepreading = true
+        }
+
+        /*============================================
+        if find something which is not a varable and
+        not a conditiona
+        ==============================================*/
+
+        else if(keepreading){
+            content += others(line)
         }
         
     })
