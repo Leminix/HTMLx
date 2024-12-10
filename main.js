@@ -2,7 +2,7 @@
 This code is unlicensed, and was writen by only one programmer. The program was made as a hobby and is
 intended for own needs.
 
-declar and define a varoble: $<name>=<value>
+declar and define a varible: $<name>=<value>
 call a varible: _$<name>_
 
 conditionals: if-start:<conditional>
@@ -55,9 +55,7 @@ rl.question('Enter file name> ', (file) => {
 
     let check = file.split('.')
     fs.writeFile(`${check[0]}.html`, '', (err) => {
-        if(err){
-            throw new Error(`${err}. file ${file} cannot be emptied`)
-        }
+        if(err) throw new Error(`${err}. file ${file} cannot be emptied`)
     })
 
     /*===============================
