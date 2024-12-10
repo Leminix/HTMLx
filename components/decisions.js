@@ -40,29 +40,25 @@ module.exports = function decisions(file){
             conditionasl for handling variables
         ============================================*/
 
-        if(line.trim().startsWith('$') && line.includes('=') && keepreading){
-            varObj.variables(line.trim())
-        }
-
-        else if(line.includes('_$') && keepreading){
-            content += varObj.replacevar(line) + "\n"
+        if(line.includes('$') && keepreading){
+            if(line.includes('=')) varObj.variables(line.trim())
+            else if(line.includes('_$')) content += varObj.replacevar(line) + "\n"
         }
 
         /*=======================================
                     conditionas
         =========================================*/
 
-        else if(line.includes('if-start:') && keepreading){
-            conditionalLevel++
-            keepreading = conditionas(line)
-        }
+        else if(line.includes('if-') && keepreading){
+            if(line.includes('if-start')){
+                conditionalLevel++
+                keepreading = conditionas(line)
+            }
 
-        else if(line.includes('if-end')){
-
-            if(conditionalLevel > 0) conditionalLevel--
-
-            if(conditionalLevel == 0) keepreading = true
-            
+            else if(line.includes('if-end')){
+                if(conditionalLevel > 0) conditionalLevel--
+                if(conditionalLevel == 0) keepreading = true
+            }
         }
 
         /*============================================
@@ -70,9 +66,7 @@ module.exports = function decisions(file){
         not a conditiona
         ==============================================*/
 
-        else if(keepreading){
-            content += others(line)
-        }
+        else if(keepreading) content += others(line)
         
     })
 
