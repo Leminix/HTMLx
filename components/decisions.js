@@ -15,7 +15,8 @@ const conditionas = require('./conditionals')
 
 
 let keepreading = true
-let lineParts = []
+let conditionalLevel = 0
+
 
 module.exports = function decisions(file){
 
@@ -35,14 +36,12 @@ module.exports = function decisions(file){
 
         const varObj = new varHandling()
 
-        lineParts = line.split('')
-
         /*==========================================
             conditionasl for handling variables
         ============================================*/
 
-        if((lineParts[0] === '$') && keepreading){
-            varObj.variables(line)
+        if(line.trim().startsWith('$') && line.includes('=') && keepreading){
+            varObj.variables(line.trim())
         }
 
         else if(line.includes('_$') && keepreading){
@@ -54,11 +53,16 @@ module.exports = function decisions(file){
         =========================================*/
 
         else if(line.includes('if-start:') && keepreading){
+            conditionalLevel++
             keepreading = conditionas(line)
         }
 
         else if(line.includes('if-end')){
-            keepreading = true
+
+            if(conditionalLevel > 0) conditionalLevel--
+
+            if(conditionalLevel == 0) keepreading = true
+            
         }
 
         /*============================================
