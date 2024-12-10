@@ -1,6 +1,7 @@
 let splitLine = []
 let variablesContent = ''
 let variablesStatus = []
+let exist = false
 
 
 class VarMet{
@@ -11,14 +12,24 @@ class VarMet{
 
             splitLine = line.split('=')
 
-            variablesStatus.push(
-                {
-                    name: splitLine[0],
-                    value: splitLine[1]
+            variablesStatus.forEach(e => {
+                if(e.name === splitLine[0]){
+                    e.value = splitLine[1]
+                    exist = true
                 }
-            )
+            })
+
+            if(!exist){
+                variablesStatus.push(
+                    {
+                        name: splitLine[0],
+                        value: splitLine[1]
+                    }
+                )
+            }
 
             splitLine = []
+            exist = false
         }
     }
 
