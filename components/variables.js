@@ -39,8 +39,8 @@ class VarMet{
 
         let isVarExist = false
 
-        variablesStatus.forEach((e) => {
-            if(e.name === splitLine[1]){
+        variablesStatus.forEach(e => {
+            if(variablesContent.includes(`_${e.name}_`)){
                 variablesContent = variablesContent.replace(`_${e.name}_`, e.value)
                 isVarExist = true
             }
@@ -48,7 +48,6 @@ class VarMet{
 
         if(!isVarExist){
             throw new Error(`variable ${splitLine[1]} is undefined`)
-            return
         }
 
         splitLine = []

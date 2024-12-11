@@ -8,7 +8,6 @@ call a varible: _$<name>_
 conditionals: if-start:<conditional>
                 code
               if-end
-conditionals can not work with variables
 
 comments: //comment
 */
