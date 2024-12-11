@@ -36,29 +36,30 @@ module.exports = function decisions(file){
 
         const varObj = new varHandling()
 
-        /*==========================================
-            conditionasl for handling variables
-        ============================================*/
-
-        if(line.includes('$') && keepreading){
-            if(line.includes('=')) varObj.variables(line.trim())
-            else if(line.includes('_$')) content += varObj.replacevar(line) + "\n"
-        }
 
         /*=======================================
                     conditionas
         =========================================*/
 
-        else if(line.includes('if-') && keepreading){
-            if(line.includes('if-start')){
-                conditionalLevel++
-                keepreading = conditionas(line)
-            }
+        if(line.includes('if-start') && keepreading){
+            conditionalLevel++
+            if(line.includes('_$')) line = varObj.replacevar(line)
+            keepreading = conditionas(line)
+        }
 
-            else if(line.includes('if-end')){
-                if(conditionalLevel > 0) conditionalLevel--
-                if(conditionalLevel == 0) keepreading = true
-            }
+        else if(line.includes('if-end')){
+            if(conditionalLevel > 0) conditionalLevel--
+            if(conditionalLevel == 0) keepreading = true
+        }
+
+        /*==========================================
+            conditionasl for handling variables
+        ============================================*/
+
+        else if(line.includes('$') && keepreading){
+            if(line.includes('=')) varObj.variables(line.trim())
+            else if(line.includes('_$')) content += varObj.replacevar(line) + "\n"
+            else content += others(line)
         }
 
         /*============================================
