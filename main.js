@@ -9,6 +9,8 @@ conditionals: if-start:<conditional>
                 code
               if-end
 
+loops: loop:<number>:<content>
+
 comments: //comment
 */
 

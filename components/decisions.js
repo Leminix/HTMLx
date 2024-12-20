@@ -12,6 +12,7 @@ const create = require('./create')
 const varHandling = require('./variables')
 const others = require('./others')
 const conditionas = require('./conditionals')
+const loop = require('./loop')
 
 
 let keepreading = true
@@ -50,6 +51,15 @@ module.exports = function decisions(file){
         else if(line.includes('if-end')){
             if(conditionalLevel > 0) conditionalLevel--
             if(conditionalLevel == 0) keepreading = true
+        }
+
+        /*==========================================
+                        loop
+        ============================================*/
+
+        else if(line.includes('loop:') && keepreading){
+            if(line.includes('_$')) line = varObj.replacevar(line)
+            content += loop(line)
         }
 
         /*==========================================
